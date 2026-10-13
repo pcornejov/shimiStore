@@ -31,3 +31,31 @@ python factibilidad/resolver.py probar '<link directo>'
 ```
 
 Los resultados están en [`factibilidad/NOTAS.md`](factibilidad/NOTAS.md).
+
+## Etapa 2: payload mínimo
+
+`shimistore.elf` (versión 0.1.0) hace tres cosas:
+- cierra una copia anterior;
+- instala el ícono `SHMI00001` en el inicio, que abre `http://127.0.0.1:8090/` a pantalla completa;
+- levanta un servidor web en el puerto 8090 que dice "Hola".
+
+Rutas del servidor:
+
+| Ruta | Respuesta |
+|---|---|
+| `/` | Página "Hola desde shimiStore" |
+| `/api/estado` | Versión, segundos encendido y pid, en JSON |
+| `/icono.png` | El ícono |
+| `/api/apagar` | Cierra el payload |
+
+El log queda en `/data/shimistore/log.txt`.
+
+```sh
+cd payload && make             # necesita el ps5-payload-sdk en /opt/ps5-payload-sdk
+make enviar PS5=192.168.68.114 # por el elfldr (puerto 9021)
+```
+
+**Sin PC:** sube `shimistore.elf` desde el celular con la interfaz web de Payload Manager
+(`http://192.168.68.114:8084`) y córrelo desde ahí.
+
+Para cambiar el ícono, edita y corre `herramientas/icono.py`.
