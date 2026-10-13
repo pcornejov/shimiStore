@@ -46,8 +46,8 @@ Tarda unos 8 a 11 s por archivo. Se resolvieron 8 seguidos sin rechazos ni captc
 | ¿Acepta `Range`? | **Sí**: `206` con `content-range` correcto, también en mitad del archivo; `accept-ranges: bytes` |
 | ¿Pide cookies? | **No**: funciona con `curl` pelado, sin cookies, User-Agent ni Referer |
 | ¿Trae tamaño y nombre? | Sí: `content-length` y `content-disposition: filename="PPSA05916.exfat"`, más `etag` |
-| ¿Cuánto dura? | Seguía vivo a los ~10 min; falta medir horas |
-| ¿Depende de la IP? | **Pendiente**: se resuelve aquí y se prueba desde la casa |
+| ¿Cuánto dura? | Seguía vivo a los 7 min; prueba a las 3 h pendiente |
+| ¿Depende de la IP? | **No.** La salida de la nube rota de IP en cada conexión (160.79.106.x) y 12 de 12 rangos dieron 206. El link resuelto ahí también lo entregó una IP de otra red (34.75.111.51, Google Cloud) |
 | ¿Responde por HTTP sin TLS? | El archivo sí (`http://tunnel1.dlproxy.uk/…` → 206). filekeeper.net redirige a HTTPS |
 | Velocidad | Desde el datacenter: ~3,6 MB/s con 1 conexión y ~120 MB/s con 4. Falta medir en la casa |
 
@@ -58,6 +58,7 @@ Unos 560 juegos (~69 %) se pueden bajar solo con HTTP. El resto queda para los h
 Consecuencias para el payload:
 - Los resolvedores no necesitan JavaScript: un GET, una espera y un POST sin seguir la redirección.
 - El descargador puede usar rangos y varias conexiones, y reanudar con `Range` + `etag`.
-- Necesita TLS para filekeeper.net, y probablemente también para bajar el archivo.
-- Si el link no depende de la IP, la nube podría resolverlo por adelantado. Igual conviene que lo resuelva la PS5,
-  porque el link vence.
+- Necesita TLS para filekeeper.net (pocas peticiones chicas). El archivo grande también baja por HTTP sin TLS.
+- Como el link no depende de la IP, la nube podría resolverlo por adelantado. Igual conviene que lo resuelva la PS5
+  justo antes de bajar, por si vence.
+- Dos resoluciones del mismo archivo dieron el mismo `sig` y casi el mismo token: la firma parece ir por archivo.
